@@ -1,0 +1,9 @@
+xlrd
+xlutils
+xlwt
+jsons
+requests
+xlsxwriter
+pywin32
+configparser
+selenium
