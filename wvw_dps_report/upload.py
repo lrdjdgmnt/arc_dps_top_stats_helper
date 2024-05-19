@@ -38,8 +38,8 @@ def main():
         # Define the directory and extension
         directory = 'C:/wvw_dps_report/logs_output/'
         extension = '.tid'
-
-        # Find all files with the .tid extension
+        
+        # Find all files with the .tid extension 
         files_to_upload = [f for f in os.listdir(directory) if f.endswith(extension)]
         
         for file_name in files_to_upload:
@@ -53,20 +53,26 @@ def main():
             # Send the file path to the file input element, simulating a file upload
             file_input.send_keys(file_path)
             print(f"Importing: {file_path}")
-
+            
+        time.sleep(2) # waiting for upload to finish before clicking import
+        
         # Click the "Import" button after all files have been uploaded
         import_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//button[text()='Import']"))
         )
         import_button.click()
         
+        time.sleep(2) # waiting for import to finish before saving
+        
         # Wait for the "Save" SVG button to be clickable
         save_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, "g.tc-image-save-button-dynamic-dirty"))
         )
-
+        
         # Click the "Save" button
         save_button.click()
+
+        time.sleep(10) # Waiting for save
 
     except Exception as e:
         print(f"An error occurred: {e}")
