@@ -25,10 +25,11 @@ def main():
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'user_email')))
         driver.find_element(By.ID, 'user_email').send_keys(config['Credentials']['Email'])
         
-        # Retrieve password from environment variable and input it
-        password = os.getenv('TIDDLYHOST_PASSWORD')
-        if not password:
-            raise ValueError("No password provided in environment variables.")
+        # Retrieve password from the configuration file
+        if 'Credentials' in config and 'Password' in config['Credentials']:
+            password = config['Credentials']['Password']
+        else:
+            raise ValueError("No password provided in the configuration file.")
         driver.find_element(By.ID, 'user_password').send_keys(password)
         driver.find_element(By.NAME, 'commit').click()
 
@@ -54,7 +55,7 @@ def main():
             file_input.send_keys(file_path)
             print(f"Importing: {file_path}")
             
-        time.sleep(2) # waiting for upload to finish before clicking import
+        time.sleep(2)  # Waiting for upload to finish before clicking import
         
         # Click the "Import" button after all files have been uploaded
         import_button = WebDriverWait(driver, 10).until(
@@ -62,7 +63,7 @@ def main():
         )
         import_button.click()
         
-        time.sleep(2) # waiting for import to finish before saving
+        time.sleep(2)  # Waiting for import to finish before saving
         
         # Wait for the "Save" SVG button to be clickable
         save_button = WebDriverWait(driver, 10).until(
@@ -72,7 +73,7 @@ def main():
         # Click the "Save" button
         save_button.click()
 
-        time.sleep(10) # Waiting for save
+        time.sleep(20)  # Waiting for save
 
     except Exception as e:
         print(f"An error occurred: {e}")

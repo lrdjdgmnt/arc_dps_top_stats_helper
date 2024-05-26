@@ -28,14 +28,19 @@ def confirm_upload(webhook_url, config):
     """
     Create a pop-up to confirm whether the logs have been uploaded.
     """
-    answer = messagebox.askyesno("Confirm Upload", "Are we uploading the logs for this WvW Session?")
+    # Create a root window
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    root.attributes("-topmost", True)  # Ensure the message box is always on top
+
+    answer = messagebox.askyesno("Confirm Upload", "Are we uploading the logs for this WvW Session?", parent=root)
     if answer:
         subprocess.run(["python", "upload.py"], shell=False)
         message = f"Check out the latest WvW Log Review here: {generate_url(config['URLs']['WikiURL'])}"
         send_to_discord(webhook_url, message)
-        messagebox.showinfo("Done", "The message has been posted to Discord.")
+        messagebox.showinfo("Done", "The message has been posted to Discord.", parent=root)
     else:
-        messagebox.showinfo("No Upload", "No Log upload tonight! I hope you had fun!")
+        messagebox.showinfo("No Upload", "No Log upload tonight! I hope you had fun!", parent=root)
 
     root.destroy()
 

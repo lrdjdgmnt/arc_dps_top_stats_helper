@@ -31,15 +31,11 @@ if %errorlevel% EQU 0 (
     echo Error: Unable to move folder.
 )
 
-:: Ask the user if they want to set the TiddlyHost password
-set /p UserInput=Do you want to set the TiddlyHost password? (yes/no): 
-if /i "%UserInput%"=="yes" (
-    set /p TIDDLYHOST_PASSWORD=Enter your TiddlyHost password: 
-    setx TIDDLYHOST_PASSWORD "%TIDDLYHOST_PASSWORD%" /M
-    echo TiddlyHost password set successfully.
-) else (
-    echo Reminder: Without the password set, the script will fail.
-)
+:: Remind user to put password in settings file
+
+Echo Please do not forget to configure your settings including
+Echo the tiddly host password in settings.ini
+Echo an example ini file has been provided :)
 
 :: pausing script for user to read any errors
 Pause
