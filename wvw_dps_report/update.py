@@ -78,6 +78,7 @@ def main():
     for repo_info in repos:
         check_and_update_version(repo_info, config, 'Versions', repo_info['extract_to'])
         
+
     subprocess.run(["python", "logs.py"], shell=False)
 
 if __name__ == "__main__":
