@@ -35,7 +35,8 @@ if %errorlevel% EQU 0 (
 
 Echo Please do not forget to configure your settings including
 Echo the tiddly host password in settings.ini
-Echo an example ini file has been provided :)
+Echo an example ini file has been provided
+Echo Rename example-settings.ini to settings.ini after configuration :)
 
 :: pausing script for user to read any errors
 Pause
