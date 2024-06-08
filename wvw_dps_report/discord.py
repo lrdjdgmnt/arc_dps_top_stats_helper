@@ -9,6 +9,11 @@ def send_to_discord(webhook_url, message):
     """
     Send a message to a Discord channel via webhook.
     """
+    # Create a root window
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    root.attributes("-topmost", True)  # Ensure the message box is always on top
+    
     data = {
         "content": message,
         "username": "F.R.E.D."

@@ -1,3 +1,3 @@
 @echo off
 
-python logs.py
+python update.py

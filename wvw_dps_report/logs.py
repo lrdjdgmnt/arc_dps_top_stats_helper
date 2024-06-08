@@ -18,11 +18,9 @@ def find_files(directory, extension, after_time):
                 if creation_time > after_time:
                     found_files.append(file_path)
     return found_files
-    
-subprocess.run(["python", "update.py"], shell=False)
 
 # Paths for parsers and output
-logpath = os.path.join(os.path.expanduser('~'), 'Documents', 'Guild Wars 2', 'addons', 'arcdps', 'arcdps.cbtlogs', 'WvW')
+logpath = os.path.join(os.path.expanduser('~'), 'Documents', 'Guild Wars 2', 'addons', 'arcdps', 'arcdps.cbtlogs')
 parserpath = os.path.join('C:\\', 'wvw_dps_report', 'parser', 'GuildWars2EliteInsights.exe')
 configpath = os.path.join('C:\\', 'wvw_dps_report', 'config.conf')
 outputpath = os.path.join('C:\\', 'wvw_dps_report', 'logs_output')
