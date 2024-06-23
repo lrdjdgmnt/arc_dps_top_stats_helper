@@ -89,7 +89,7 @@ def main():
         check_and_update_version(repo_info, config, 'Versions', repo_info['extract_to'])
         
     # Run the logs
-    # subprocess.run(["python", "logs.py"], shell=False)
+    subprocess.run(["python", "logs.py"], shell=False)
 
 if __name__ == "__main__":
     main()
