@@ -41,7 +41,7 @@ def confirm_upload(webhook_url, config):
     answer = messagebox.askyesno("Confirm Upload", "Are we uploading the logs for this WvW Session?", parent=root)
     if answer:
         subprocess.run(["python", "upload.py"], shell=False)
-        message = f"Check out the latest WvW Log Review here: {generate_url(config['URLs']['WikiURL'])}"
+        message = f"{config['Discord']['message']} {generate_url(config['URLs']['WikiURL'])}"
         send_to_discord(webhook_url, message, config['Discord']['botname'])
         messagebox.showinfo("Done", "The message has been posted to Discord.", parent=root)
     else:
