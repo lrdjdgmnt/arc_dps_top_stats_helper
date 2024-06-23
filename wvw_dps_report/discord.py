@@ -5,7 +5,7 @@ from datetime import datetime
 import tkinter as tk
 from tkinter import messagebox
 
-def send_to_discord(webhook_url, message):
+def send_to_discord(webhook_url, message, botname):
     """
     Send a message to a Discord channel via webhook.
     """
@@ -16,7 +16,7 @@ def send_to_discord(webhook_url, message):
     
     data = {
         "content": message,
-        "username": "F.R.E.D."
+        "username": botname
     }
     response = requests.post(webhook_url, json=data)
     response.raise_for_status()  # This will raise an exception for HTTP errors.
@@ -42,7 +42,7 @@ def confirm_upload(webhook_url, config):
     if answer:
         subprocess.run(["python", "upload.py"], shell=False)
         message = f"Check out the latest WvW Log Review here: {generate_url(config['URLs']['WikiURL'])}"
-        send_to_discord(webhook_url, message)
+        send_to_discord(webhook_url, message, config['Discord']['botname'])
         messagebox.showinfo("Done", "The message has been posted to Discord.", parent=root)
     else:
         messagebox.showinfo("No Upload", "No Log upload tonight! I hope you had fun!", parent=root)
@@ -54,8 +54,9 @@ def main():
     config = configparser.ConfigParser()
     config.read('settings.ini')
 
-    # Get webhook URL from config
+    # Get webhook URL and bot name from config
     webhook_url = config['Discord']['WebhookURL']
+    botname = config['Discord']['botname']
     confirm_upload(webhook_url, config)
 
 if __name__ == "__main__":

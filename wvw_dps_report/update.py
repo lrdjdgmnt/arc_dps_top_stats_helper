@@ -20,23 +20,33 @@ def download_archive(download_url, file_name):
 
 def extract_files(zip_path, extract_to, specific_subfolder=None):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        for member in zip_ref.infolist():
-            if specific_subfolder and specific_subfolder not in member.filename:
-                continue
-
-            # Calculate the target path by removing the leading directories up to the specific_subfolder
-            if specific_subfolder:
-                _, subfolder_relative_path = member.filename.split(specific_subfolder, 1)
-                target_path = os.path.join(extract_to, subfolder_relative_path.lstrip('/\\'))
-            else:
+        if specific_subfolder:
+            subfolder_path = None
+            for member in zip_ref.infolist():
+                if specific_subfolder in member.filename:
+                    subfolder_path = member.filename
+                    break
+            if subfolder_path:
+                subfolder_root = os.path.commonprefix([m.filename for m in zip_ref.infolist() if m.filename.startswith(subfolder_path)])
+                for member in zip_ref.infolist():
+                    if member.filename.startswith(subfolder_root):
+                        member_path = os.path.relpath(member.filename, subfolder_root)
+                        target_path = os.path.join(extract_to, member_path)
+                        os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                        if member.filename.endswith('/'):
+                            os.makedirs(target_path, exist_ok=True)
+                        else:
+                            with zip_ref.open(member) as source, open(target_path, 'wb') as target:
+                                shutil.copyfileobj(source, target)
+        else:
+            for member in zip_ref.infolist():
                 target_path = os.path.join(extract_to, member.filename)
-
-            os.makedirs(os.path.dirname(target_path), exist_ok=True)
-            if member.filename.endswith('/'):
-                os.makedirs(target_path, exist_ok=True)
-            else:
-                with zip_ref.open(member) as source, open(target_path, 'wb') as target:
-                    shutil.copyfileobj(source, target)
+                os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                if member.filename.endswith('/'):
+                    os.makedirs(target_path, exist_ok=True)
+                else:
+                    with zip_ref.open(member) as source, open(target_path, 'wb') as target:
+                        shutil.copyfileobj(source, target)
     os.remove(zip_path)
 
 def check_and_update_version(repo_info, config, version_section, extract_to):
@@ -56,7 +66,7 @@ def check_and_update_version(repo_info, config, version_section, extract_to):
         elif repo in ["arcdps_top_stats_parser", "arc_dps_top_stats_helper"]:
             download_url = f"https://github.com/{user}/{repo}/archive/refs/tags/{latest_version}.zip"
             zip_file = download_archive(download_url, f"{repo}-{latest_version}.zip")
-            specific_subfolder = "wvw_dps_report" if repo == "arc_dps_top_stats_helper" else None
+            specific_subfolder = repo if repo == "arcdps_top_stats_parser" else "wvw_dps_report"
             extract_files(zip_file, extract_to, specific_subfolder=specific_subfolder)
         
         config[version_section][repo_info['config_key']] = latest_version
@@ -79,7 +89,7 @@ def main():
         check_and_update_version(repo_info, config, 'Versions', repo_info['extract_to'])
         
     # Run the logs
-    subprocess.run(["python", "logs.py"], shell=False)
+    # subprocess.run(["python", "logs.py"], shell=False)
 
 if __name__ == "__main__":
     main()
