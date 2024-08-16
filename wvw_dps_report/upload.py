@@ -72,8 +72,8 @@ def main():
         
         # Click the "Save" button
         save_button.click()
-
-        time.sleep(20)  # Waiting for save
+        print("Waiting for Wiki to save")
+        time.sleep(120)  # Waiting for save
 
     except Exception as e:
         print(f"An error occurred: {e}")
